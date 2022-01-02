@@ -1,4 +1,4 @@
-FROM node:10-alpine AS node-builder
+FROM node:17-alpine AS node-builder
 
 RUN apk update && \
 	apk add make
@@ -10,15 +10,15 @@ COPY static /app/static
 RUN cd /app/static && \
 	make
 
-FROM golang:1.13 AS go-builder
+FROM golang:1.17 AS go-builder
 
 WORKDIR /go/src/github.com/xiam/go-playground/webapp/
 
 COPY . .
 
-RUN go install github.com/xiam/go-playground/webapp
+RUN go build -o /go/bin/webapp .
 
-FROM debian:buster
+FROM debian:bullseye
 
 RUN apt-get update && \
   apt-get install -y ca-certificates

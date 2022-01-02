@@ -1,7 +1,7 @@
 IMAGE_VERSION     ?=
 
 docker-push:
-	parallel IMAGE_VERSION="$(IMAGE_VERSION)" $(MAKE) -C {} docker-push ::: webapp unsafebox sandbox
+	parallel IMAGE_VERSION="$(IMAGE_VERSION)" $(MAKE) -C {} docker-push ::: webapp unsafebox
 
 require-version:
 	@test $(IMAGE_VERSION) || (echo "missing IMAGE_VERSION" && exit 1)

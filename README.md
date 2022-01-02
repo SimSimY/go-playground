@@ -11,31 +11,33 @@ real filesystem, CGO or any kind of thing that is not supported or actively
 restricted by [NaCL](https://developer.chrome.com/native-client) you're out of
 luck.
 
-This *unrestricted and insecure* playground offers you more flexibility on that
-front, you can choose when to use the sandboxed environment and when not to.
+## `unsafebox` disclaimer
+
+I basically took out all the security measures of the original sandbox and
+generated a dumbed down version of it which actually does not protects against
+anything and will put your life at risk.
+
+This is a unrestricted linux/amd64 installation, you should **not** really use
+this box unless you're absolutely sure you know what you're doing and you're
+aware that no matter what you do, people will try to abuse the system and they
+will probably succeed.
 
 ## Quick start with docker
 
-You can run playground and connect it to a local sandbox like this:
+You can run playground and connect it to a local unsafebox like this:
 
 ```
+# Running the unsafebox
 docker run \
-  -d \
-  --name go-playground-sandbox \
+ -d \
+ --name go-playground-unsafebox \
   -p 127.0.0.1:8080:8080 \
-  xiam/go-playground-sandbox
+  xiam/go-playground-unsafebox
 
-# Running unsafebox
-# docker run \
-#  -d \
-#  --name go-playground-unsafebox \
-#  -p 127.0.0.1:8080:8080 \
-#  xiam/go-playground-unsafebox
-
-# Running web editor
+# Running the web ui
 docker run \
   -d \
-  --link go-playground-sandbox:compiler \
+  --link go-playground-unsafebox:compiler \
   --name go-playground \
   -p 0.0.0.0:3000:3000 \
   xiam/go-playground \
@@ -76,45 +78,17 @@ site? You can also embed them in your website using a few lines of code:
 
 See a local example at http://127.0.0.1:3000/example.
 
-### Unsafebox
-
-I basically took out all the security measures of the original sandbox and
-generated a dumbed down version of it which actually does not sandbox anything
-and will put your life at risk.
-
-This is a unrestricted linux/amd64 installation, you should not really use this
-box unless you're absolutely sure you know what you're doing and you're aware
-that no matter what you do, people will try to abuse the system and they will
-probably succeed.
-
-Ok, now that you're warned, you can (but shouldn't) build and run this
-*dangerous box* like this:
-
-```
-cd unsafebox
-make docker-run
-```
-
-You can point the Go Playground web app to this service using the `-c`
-parameter:
-
-```
-cd webapp
-go build
-./webapp -allow-share -c "http://localhost:8080/compile?output=json"
-```
-
 Remember that this machine is completely open to the world, if you plan to
 upload it to a public place you should take some other containment measures,
-such as not using root to run the sandbox, using chroot jails and iptables
+such as not using root to run the unsafebox, using chroot jails and iptables
 rules, etc. this really depends on your specific needs.
 
 ### Importing custom packages
 
 Users of your playground won't be able to install or use packages that are not
 part of the Go standard library, in case you want to showcase a special package
-you'll have to create a slightly different docker image on top of the sandbox
-or the unsafebox, see this `Dockerfile`:
+you'll have to create a slightly different docker image on top of the
+unsafebox, see this `Dockerfile`:
 
 ```
 FROM xiam/go-playground-unsafebox
@@ -134,7 +108,7 @@ packages from your playground:
 ![screen shot 2016-01-03 at 2 32 00 pm](https://cloud.githubusercontent.com/assets/385670/12080650/d6037186-b226-11e5-8bd1-3b98627a1e03.png)
 
 Feel free to use this playground on your next workshop to demonstrate your Go
-projects to others.
+skills and impress your friends.
 
 [1]: https://www.golang.org/
 [2]: https://play.golang.org/
