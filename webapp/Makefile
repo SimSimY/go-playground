@@ -1,6 +1,5 @@
 IMAGE_NAME        ?= xiam/go-playground
 IMAGE_TAG         ?= latest
-IMAGE_VERSION     ?=
 
 GIT_SHORTHASH     ?= $(shell git rev-parse --short HEAD)
 
@@ -38,7 +37,7 @@ docker-run:
 	docker run \
 		-p 0.0.0.0:3000:3000 \
 		--name $(CONTAINER_NAME) \
-		-t $(IMAGE_NAME)
+		-t $(IMAGE_NAME):$(GIT_SHORTHASH)
 
 docker-push: docker-build
 	docker tag $(IMAGE_NAME):$(GIT_SHORTHASH) $(IMAGE_NAME):$(IMAGE_TAG) && \
