@@ -90,7 +90,7 @@ func compileAndRun(req *Request) (*Response, error) {
 
 	exe := filepath.Join(tmpDir, "a.out")
 	cmd := exec.Command("go", "build", "-o", exe, in)
-	cmd.Env = []string{"CGO=1", "GOOS=linux", "GOARCH=amd64", "GOPATH=" + os.Getenv("GOPATH"), "GOCACHE=" + os.Getenv("GOCACHE")}
+	cmd.Env = []string{"GO111MODULE=" + os.Getenv("GO111MODULE"), "CGO=1", "GOOS=linux", "GOARCH=amd64", "GOPATH=" + os.Getenv("GOPATH"), "GOCACHE=" + os.Getenv("GOCACHE")}
 	if out, err := cmd.CombinedOutput(); err != nil {
 		if _, ok := err.(*exec.ExitError); ok {
 			// Return compile errors to the user.
